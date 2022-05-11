@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>product-selector demo</title>
+    <script src="../build/webcomponents-loader.js"></script>
+    <script src="../build/scoping-ambients-shim.min.js"></script>
+    <script src="../build/custom-style-interface.min.js"></script>
+    <script>
+      {
+        const _customElementsDefine = window.customElements.define;
+        window.customElements.define = (name, cl, conf) => {
+          if (customElements.get(name)) {
+            console.warn(`${name} has been defined twice`);
+          } else {
+            _customElementsDefine.call(window.customElements, name, cl, conf);
+          }
+        };
+      }
+    </script>
+    <script defer src="../build/component.js"></script>
+    <script type="module" crossorigin="use-credentials">
+      import '../build/demo-build.js';
+    </script>
+  </head>
+
+  <body>
+    <bbva-core-demo-helper events='["item-selected"]'>
+      <bbva-core-demo-case heading="One Currency" description="Default specs">
+        <template>
+          
+          <script type="module">
+            const { ONE_CURRENCY } = window.DemoHelpers;
+            const productSelector = document.querySelector('product-selector');
+            const buttonClear = document.querySelector('button');
+            productSelector.items = ONE_CURRENCY;
+            productSelector.selected = 2;
+            productSelector.type = 'card';
+            buttonClear.addEventListener('click', ()=>{
+              productSelector.clearCurrentSelection();
+            })
+          </script>
+
+          <button>Limpiar</button>
+          <product-selector></product-selector>
+        </template>
+      </bbva-core-demo-case>
+
+      <bbva-core-demo-case heading="More Currency" description="More currency">
+        <template>
+          
+          <script type="module">
+            const { MORE_CURRENCY } = window.DemoHelpers;
+            const productSelector = document.querySelector('product-selector');
+            const buttonClear = document.querySelector('button');
+            productSelector.items = MORE_CURRENCY;
+            productSelector.selected = 2;
+            productSelector.type = 'card';
+            buttonClear.addEventListener('click', ()=>{
+              productSelector.clearCurrentSelection();
+            })
+          </script>
+
+          <button>Limpiar</button>
+          <product-selector></product-selector>
+        </template>
+      </bbva-core-demo-case>
+      
+      <bbva-core-demo-case heading="New Currency" description="New currency">
+        <template>
+          
+          <script type="module">  
+            const buttonClear = document.querySelector('button');          
+            const { DataManager } = window.DemoHelpers;            
+            const productSelector = document.querySelector('product-selector');
+            let manager = new DataManager('https://mock-senda-node.herokuapp.com/financial-overview/v0/financial-overview?contracts.productType=ACCOUNTS')
+            manager.obtenerCuentas().then(res => {
+              console.log('index res ', res);
+              productSelector.items = res;
+              productSelector.selected = 1;
+              productSelector.type = 'card';
+              buttonClear.addEventListener('click', ()=>{
+                productSelector.clearCurrentSelection();
+              })
+            });            
+          </script>
+
+          <button>Limpiar</button>
+          <product-selector></product-selector>
+        </template>
+      </bbva-core-demo-case> 
+
+    </bbva-core-demo-helper>
+  </body>
+</html>
